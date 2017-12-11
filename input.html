@@ -16,7 +16,7 @@
     <input type="text">
     <i class="iconfont icon-search"></i>
   </div>
-  <div style="display:inline-block;position:relative;" class="date">
+  <div class="date">
     <div class="ly-input" icon>
       <input type="text">
       <i class="iconfont icon-date"></i>
@@ -37,71 +37,29 @@
         </div>
       </div>
       <div class="date-picker-main"></div>
-      <!-- <table class="date-picker-table">
-        <tr>
-          <th>日</th>
-          <th>一</th>
-          <th>二</th>
-          <th>三</th>
-          <th>四</th>
-          <th>五</th>
-          <th>六</th>
-        </tr>
-        <tr>
-          <td class="prev-month"><span>29</span></td>
-          <td class="prev-month"><span>30</span></td>
-          <td class="prev-month"><span>31</span></td>
-          <td><span>1</span></td>
-          <td><span>2</span></td>
-          <td><span>3</span></td>
-          <td><span>4</span></td>
-        </tr>
-        <tr>
-          <td><span>5</span></td>
-          <td><span>6</span></td>
-          <td><span>7</span></td>
-          <td><span>8</span></td>
-          <td><span>9</span></td>
-          <td><span>10</span></td>
-          <td><span>11</span></td>
-        </tr>
-        <tr>
-          <td><span>12</span></td>
-          <td><span>13</span></td>
-          <td><span>14</span></td>
-          <td><span>15</span></td>
-          <td><span>16</span></td>
-          <td><span>17</span></td>
-          <td><span>18</span></td>
-        </tr>
-        <tr>
-          <td><span>19</span></td>
-          <td><span>20</span></td>
-          <td><span>21</span></td>
-          <td><span>22</span></td>
-          <td><span>23</span></td>
-          <td><span>24</span></td>
-          <td><span>25</span></td>
-        </tr>
-        <tr>
-          <td class="current"><span>26</span></span></td>
-          <td><span>27</span></td>
-          <td><span>28</span></td>
-          <td><span>29</span></td>
-          <td><span>30</span></td>
-          <td class="next-month"><span>1</span></td>
-          <td class="next-month"><span>2</span></td>
-        </tr>
-        <tr>
-          <td class="next-month"><span>3</span></td>
-          <td class="next-month"><span>4</span></td>
-          <td class="next-month"><span>5</span></td>
-          <td class="next-month"><span>6</span></td>
-          <td class="next-month"><span>7</span></td>
-          <td class="next-month"><span>8</span></td>
-          <td class="next-month"><span>9</span></td>
-        </tr>
-      </table> -->
+    </div>
+  </div>
+  <div class="date" hiddenDay="true">
+    <div class="ly-input" icon>
+      <input type="text">
+      <i class="iconfont icon-date"></i>
+    </div>
+    <div class="date-picker">
+      <div class="row w date-picker-header">
+        <div class="col v-m t-l">
+          <a href="javascript:;" class="iconfont icon-home"></a>
+          <a href="javascript:;" class="iconfont icon-left"></a>
+        </div>
+        <div class="col v-m t-c title">
+          <!-- <i class="year">2012年</i>
+          <i class="month">12月</i> -->
+        </div>
+        <div class="col v-m t-r">
+          <a href="javascript:;" class="iconfont icon-right"></a>
+          <a href="javascript:;" class="iconfont icon-end"></a>
+        </div>
+      </div>
+      <div class="date-picker-main"></div>
     </div>
   </div>
   
@@ -120,12 +78,18 @@
         var main = _this.find('.date-picker-main')  
         var yearCollect = false; //是否正在进行年份集合的筛选 
         var monthCollect = false;   
+        var hiddenDay = _this.attr('hiddenDay')
+        console.log('hiddenDay',hiddenDay)
         
         var chosenYear = new Date().getFullYear(), 
           chosenMonth = new Date().getMonth() + 1,
           chosenDate = new Date().getDate(),
-          minYear;
-        renderDate()
+          minYear = Math.floor(chosenYear/10)*10;
+        if(!hiddenDay){
+          renderDate()
+        }else{
+          renderMonth()
+        }
 
         input.focus(function(){
           datePicker.slideDown(300)
@@ -248,9 +212,15 @@
           main.html(monthPanel)
           _this.find('.month-panel td').eq(chosenMonth - 1).addClass('current')
           _this.find('.month-panel td').click(function(){
-            monthCollect = false; 
             chosenMonth = $(this).attr('month')
-            renderDate()
+            if(!hiddenDay){
+              monthCollect = false; 
+              renderDate()
+            }else{
+              var yearMonth = chosenYear + '-'+ chosenMonth
+              input.val(yearMonth)
+              datePicker.slideUp(300)
+            }
           })
 
           _this.find('.change').click(function(){
@@ -263,7 +233,6 @@
         // 点击头部年份，首先renderYear，选中年份，renderMonth，选中月份，renderDate
 
         function renderYear(){
-          
           monthMinus.hide()
           monthPlus.hide()
           yearCollect = true; // 标识
