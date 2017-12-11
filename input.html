@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>input</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="http://at.alicdn.com/t/font_430701_d1vx8c4ce7t1q0k9.css">
+</head>
+<body>
+  <div class="ly-input">
+    <input type="text">
+  </div>
+  <div class="ly-input" icon>
+    <input type="text">
+    <i class="iconfont icon-search"></i>
+  </div>
+  <div style="display:inline-block;position:relative;" class="date">
+    <div class="ly-input" icon>
+      <input type="text">
+      <i class="iconfont icon-date"></i>
+    </div>
+    <div class="date-picker">
+      <div class="row w date-picker-header">
+        <div class="col v-m t-l">
+          <a href="javascript:;" class="iconfont icon-home"></a>
+          <a href="javascript:;" class="iconfont icon-left"></a>
+        </div>
+        <div class="col v-m t-c title">
+          <!-- <i class="year">2012年</i>
+          <i class="month">12月</i> -->
+        </div>
+        <div class="col v-m t-r">
+          <a href="javascript:;" class="iconfont icon-right"></a>
+          <a href="javascript:;" class="iconfont icon-end"></a>
+        </div>
+      </div>
+      <div class="date-picker-main"></div>
+      <!-- <table class="date-picker-table">
+        <tr>
+          <th>日</th>
+          <th>一</th>
+          <th>二</th>
+          <th>三</th>
+          <th>四</th>
+          <th>五</th>
+          <th>六</th>
+        </tr>
+        <tr>
+          <td class="prev-month"><span>29</span></td>
+          <td class="prev-month"><span>30</span></td>
+          <td class="prev-month"><span>31</span></td>
+          <td><span>1</span></td>
+          <td><span>2</span></td>
+          <td><span>3</span></td>
+          <td><span>4</span></td>
+        </tr>
+        <tr>
+          <td><span>5</span></td>
+          <td><span>6</span></td>
+          <td><span>7</span></td>
+          <td><span>8</span></td>
+          <td><span>9</span></td>
+          <td><span>10</span></td>
+          <td><span>11</span></td>
+        </tr>
+        <tr>
+          <td><span>12</span></td>
+          <td><span>13</span></td>
+          <td><span>14</span></td>
+          <td><span>15</span></td>
+          <td><span>16</span></td>
+          <td><span>17</span></td>
+          <td><span>18</span></td>
+        </tr>
+        <tr>
+          <td><span>19</span></td>
+          <td><span>20</span></td>
+          <td><span>21</span></td>
+          <td><span>22</span></td>
+          <td><span>23</span></td>
+          <td><span>24</span></td>
+          <td><span>25</span></td>
+        </tr>
+        <tr>
+          <td class="current"><span>26</span></span></td>
+          <td><span>27</span></td>
+          <td><span>28</span></td>
+          <td><span>29</span></td>
+          <td><span>30</span></td>
+          <td class="next-month"><span>1</span></td>
+          <td class="next-month"><span>2</span></td>
+        </tr>
+        <tr>
+          <td class="next-month"><span>3</span></td>
+          <td class="next-month"><span>4</span></td>
+          <td class="next-month"><span>5</span></td>
+          <td class="next-month"><span>6</span></td>
+          <td class="next-month"><span>7</span></td>
+          <td class="next-month"><span>8</span></td>
+          <td class="next-month"><span>9</span></td>
+        </tr>
+      </table> -->
+    </div>
+  </div>
+  
+  <script src="js/jquery.js"></script>
+  <script>
+    $(function(){
+      $('.date').each(function(idx,el){ 
+        var _this = $(el)
+        var input = _this.find('.ly-input input')
+        var yearMinus = _this.find('.icon-home')
+        var monthMinus = _this.find('.icon-left')
+        var monthPlus = _this.find('.icon-right')
+        var yearPlus = _this.find('.icon-end')
+        var chosenTitle = _this.find('.title')
+        var datePicker = _this.find('.date-picker') 
+        var main = _this.find('.date-picker-main')  
+        var yearCollect = false; //是否正在进行年份集合的筛选 
+        var monthCollect = false;   
+        
+        var chosenYear = new Date().getFullYear(), 
+          chosenMonth = new Date().getMonth() + 1,
+          chosenDate = new Date().getDate(),
+          minYear;
+        renderDate()
+
+        input.focus(function(){
+          datePicker.slideDown(300)
+        })
+
+        yearMinus.click(function(){
+          if(yearCollect){
+            minYear -= 10
+            renderYear() 
+          }else if(monthCollect){
+            chosenYear--;
+            renderMonth()
+          }else{
+            chosenYear--;
+            renderDate()
+          }
+        })
+
+        yearPlus.click(function(){
+          if(yearCollect){
+            minYear += 10
+            renderYear() 
+          }else if(monthCollect){
+            chosenYear++;
+            renderMonth()
+          }else{
+            chosenYear++;
+            renderDate()
+          }
+        })
+
+        monthMinus.click(function(){
+          if(chosenMonth > 1){
+            chosenMonth --
+          }else{
+            chosenMonth = 12
+            chosenYear--
+          }
+          renderDate()
+        })
+
+        monthPlus.click(function(){
+          if(chosenMonth < 12 ){
+            chosenMonth ++
+          }else{
+            chosenMonth = 1
+            chosenYear++
+          }
+          renderDate()
+        })
+
+        function renderDate(){
+          monthMinus.show()
+          monthPlus.show()
+
+          console.log(chosenYear,chosenMonth)
+          minYear = Math.floor(chosenYear/10)*10
+          var firstDay = new Date(chosenYear, chosenMonth-1, 1), // 当月第一天
+            firstDayWeek = firstDay.getDay(), // 当月第一天的星期
+            daysPerMonth = new Array(31, 28 + isLeap(chosenYear), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31), // 当年月份数组
+            rows = Math.ceil((daysPerMonth[chosenMonth-1] + firstDayWeek)/7), // 当月日期所占行数
+            chosenMonthDay = daysPerMonth[chosenMonth - 1], // 当月天数
+            prevMonthDay = chosenMonth > 1 ? daysPerMonth[chosenMonth - 2] : 31 // 上月天数
+          console.log(firstDay,firstDayWeek)
+
+          var title = '<i class="year">'+chosenYear+'年</i><i class="month">'+chosenMonth+'月</i>'
+          chosenTitle.html(title)
+          var dateTable = '<table class="date-picker-table"><tr><th>日</th><th>一</th><th>二</th><th>三</th><th>四</th><th>五</th><th>六</th></tr>'
+
+          // 一个月统一显示六行
+          for(var i=0; i < 6; i++){
+            var rowtd = '<tr>'
+            for(var j=0;j < 7;j++){
+              var idx = 7*i + j
+              var real = idx - firstDayWeek + 1
+              if(real <= 0){
+                rowtd += '<td class="prev-month"><span>'+(real + prevMonthDay)+'</span></td>'
+              }else if(real > chosenMonthDay){
+                rowtd += '<td class="next-month"><span>'+(real - chosenMonthDay)+'</span></td>'
+              }else{
+                rowtd += '<td><span>'+real+'</span></td>'
+              }
+            }
+            rowtd += '</tr>'
+            dateTable += rowtd
+          }
+          main.html(dateTable)
+          
+          // 选中日期操作
+          _this.find('.date-picker-table td').click(function(){
+            $(this).addClass('current').siblings('td').removeClass('current')
+            $(this).parent().siblings('tr').find('td').removeClass('current')
+            var val = chosenYear + '-'+ chosenMonth + '-'+ $(this).find('span').html()
+            console.log(val,input)
+            input.val(val)
+            datePicker.slideUp(300)
+          }) 
+
+          // 月份面板
+          _this.find('.month').click(function(){
+            renderMonth()
+          })
+
+          // 年份面板
+          _this.find('.year').click(function(){
+            renderYear() 
+          })        
+        } 
+
+        function renderMonth(){
+          monthMinus.hide()
+          monthPlus.hide()
+          _this.find('.month').hide()
+          monthCollect = true; 
+
+          var html = chosenYear + '年'
+          chosenTitle.html('<i class="change">'+html+'</i>')
+
+          var monthPanel = '<table class="date-picker-table large month-panel"><tr><td month="1">一月</td><td month="2">二月</td><td month="3">三月</td><td month="4">四月</td></tr><tr><td month="5">五月</td><td month="6">六月</td><td month="7">七月</td><td month="8">八月</td></tr><tr><td month="9">九月</td><td month="10">十月</td><td month="11">十一月</td><td month="12">十二月</td></tr></table>'
+          main.html(monthPanel)
+          _this.find('.month-panel td').eq(chosenMonth - 1).addClass('current')
+          _this.find('.month-panel td').click(function(){
+            monthCollect = false; 
+            chosenMonth = $(this).attr('month')
+            renderDate()
+          })
+
+          _this.find('.change').click(function(){
+            console.log('change')
+            renderYear() 
+          })
+        }
+
+        // 点击头部月份，首先renderMonth，再点击头部，renderYear
+        // 点击头部年份，首先renderYear，选中年份，renderMonth，选中月份，renderDate
+
+        function renderYear(){
+          
+          monthMinus.hide()
+          monthPlus.hide()
+          yearCollect = true; // 标识
+
+          var html = minYear + '-' + (minYear + 10)
+          chosenTitle.html('<i>'+html+'</i>')
+
+          var yearPanel = '<table class="date-picker-table large year-panel">'
+          for(var i=0;i<3;i++){
+            yearPanel += '<tr>'
+            for(var j=0;j<4;j++){
+              var index = minYear + 4*i + j
+              yearPanel += '<td>'+index+'</td>'
+            }
+            yearPanel += '</tr>'
+          }
+          yearPanel += '</table>'
+          main.html(yearPanel)
+          _this.find('.year-panel td').eq(chosenYear - minYear).addClass('current')
+          _this.find('.year-panel td').click(function(){
+            yearCollect = false;
+            chosenYear = $(this).html()
+            renderMonth()
+          })
+        }
+
+        // 判断闰年，返回1是闰年（能被4整除，不能被100整除或者能被400整除）
+        function isLeap(year) {
+          return year % 4 == 0 ? (year % 100 != 0 ? 1 : (year % 400 == 0 ? 1 : 0)) : 0;
+        }
+      })
+    })
+  </script>
+</body>
+</html>
+
+
+
+

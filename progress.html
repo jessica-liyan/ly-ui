@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>progress</title>
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+  <div class="ly-progress" percent="30%">
+    <div class="ly-progress-bar"></div>
+  </div>
+  <div class="ly-progress" percent="50%">
+    <div class="ly-progress-bar"></div>
+  </div>
+  <div class="ly-progress" percent="100%">
+    <div class="ly-progress-bar"></div>
+  </div>
+  <div class="ly-progress" textInside="true">
+    <div class="ly-progress-bar" percent="30%"></div>
+  </div>
+  <div class="ly-progress" textInside="true">
+    <div class="ly-progress-bar" percent="50%"></div>
+  </div>
+  <div class="ly-progress" textInside="true">
+    <div class="ly-progress-bar" percent="100%"></div>
+  </div>
+  <script src="js/jquery.js"></script>
+  <script>
+    // 通过属性值初始化进度条的长度
+    $(function(){
+      $('.ly-progress-bar').each(function(){
+        var wid = $(this).parent().attr('percent') || $(this).attr('percent')
+        $(this).width(wid)
+      })
+    })
+  </script>
+</body>
+</html>
