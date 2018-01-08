@@ -26,6 +26,19 @@
   <div class="ly-progress" textInside="true">
     <div class="ly-progress-bar" percent="100%"></div>
   </div>
+
+  <div style="width:126px;height:126px;" percent="30%">
+    <svg viewBox="0 0 100 100" class="svg">
+      <path class="path" stroke="#e5e9f2" fill="none"></path>
+      <path class="path circle" stroke-linecap="round" fill="none"></path>
+    </svg>
+  </div>
+  <div style="width:150px;height:150px;" percent="50%">
+    <svg viewBox="0 0 100 100" class="svg">
+      <path class="path" stroke="#e5e9f2" fill="none"></path>
+      <path class="path circle" stroke-linecap="round" fill="none"></path>
+    </svg>
+  </div>
   <script src="js/jquery.js"></script>
   <script>
     // 通过属性值初始化进度条的长度
@@ -34,7 +47,38 @@
         var wid = $(this).parent().attr('percent') || $(this).attr('percent')
         $(this).width(wid)
       })
+
+      // 环形
+      $('.svg').each(function(idx,el){
+        var percent = $(el).parent().attr('percent')
+        var circle = $(el).find('.circle')
+        var path = $(el).find('.path')
+
+        var width = $(this).width() // 画布宽度
+        var strokeWidth = 6  // stroke宽度
+        var relativeStrokeWidth = strokeWidth / width * 100 // stroke相对宽度
+        var radius = ~~(50 - Number.parseFloat(relativeStrokeWidth)/2) //相对半径
+
+        path.attr('d',`M 50 50 m 0 -${radius} a ${radius} ${radius} 0 1 1 0 ${radius*2} a ${radius} ${radius} 0 1 1 0 -${radius*2}`)
+        path.attr('stroke-width', `${relativeStrokeWidth}px`)
+
+        var array =  (50 - relativeStrokeWidth / 2) * 2 * Math.PI;
+        var offset = (1 - parseInt(percent)/100 ) * array
+        circle.css({
+          stroke: '#409EFF',
+          strokeDasharray: `${array}px, ${array}px`,
+          strokeDashoffset: `${offset}px`,
+          transition: '0.6s ease'
+        })
+      })
     })
+
+    //<circle cx="60" cy="60" r="50" fill="#FFF" />
+    // M 50 50 m 0 -47 a 47 47 0 1 1 0 94 a 47 47 0 1 1 0 -94
+    // M x y 绝对位置，需要移动到的点的x轴和y轴的坐标
+    // A rx ry xrotation 1大弧0小弧  1顺0逆 x y         
+    // 'M', 0, 0, 'v', -r, 'A', r, r, 0, lenghty, 1, x, y
   </script>
 </body>
 </html>
+
